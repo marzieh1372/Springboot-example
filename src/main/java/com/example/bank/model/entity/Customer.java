@@ -6,8 +6,8 @@ import java.util.List;
 @Entity
 public class Customer {
 
-    @Embedded
-    private Address address;
+   /* @Embedded
+    private Address address;*/
 
    @OneToMany
    @JoinColumn(name = "address_fk")
