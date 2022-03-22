@@ -37,7 +37,7 @@ public class CustomerController {
     @PostMapping("/add-customer")
     public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
         //TODO set validation on dto
-        LOGGER.info("Starting registerCustomer method {" + customer.getUserName() + "}");
+        LOGGER.info("Starting addCustomer method {" + customer.getUserName() + "}");
         Customer savedCustomer = customerService.registerCustomer(customer);
         return new ResponseEntity<Customer>(savedCustomer, HttpStatus.CREATED);
 

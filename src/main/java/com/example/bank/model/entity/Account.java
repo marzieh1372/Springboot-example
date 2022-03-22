@@ -22,7 +22,7 @@ public class Account {
     private String accountNo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
+    @JoinColumn(name = "CUSTOMERID", nullable = false)
     private Customer customer;
 
 }

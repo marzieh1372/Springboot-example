@@ -7,23 +7,25 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "CUSTOMER")
 public class Customer {
+
+   /* @Embedded
+    private Address address;*/
 
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
    @Column(name = "ID")
    private Long id;
 
-   @Column(name = "USERNAME", nullable = false,unique = true)
+   @Column(name = "USERNAME", nullable = false, unique = true)
    private String userName;
 
    @Column(name = "FIRSTNAME")
@@ -38,7 +40,7 @@ public class Customer {
    @Column(name = "PHONENUMBER")
    private String phone;
 
-   @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private Set<Account> accountSet = new HashSet<>();
 
 }
