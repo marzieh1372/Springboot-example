@@ -4,6 +4,7 @@ package com.example.bank.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -22,7 +23,10 @@ public class Account {
     private String accountNo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CUSTOMERID", nullable = false)
+    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     private Customer customer;
+
+    @Column(name = "BALANCE")
+    private BigDecimal balance;
 
 }

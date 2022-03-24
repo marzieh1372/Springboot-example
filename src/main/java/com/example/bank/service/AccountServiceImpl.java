@@ -1,7 +1,9 @@
 package com.example.bank.service;
 
 import com.example.bank.exceptions.AccountNotFoundException;
+import com.example.bank.exceptions.AmountRestrictionException;
 import com.example.bank.exceptions.CustomerNotFoundException;
+import com.example.bank.model.dto.AccountDepositDto;
 import com.example.bank.model.entity.Account;
 import com.example.bank.model.entity.Customer;
 import com.example.bank.repo.AccountRepository;
@@ -12,6 +14,7 @@ import org.springframework.boot.autoconfigure.freemarker.FreeMarkerTemplateAvail
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Null;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +64,45 @@ public class AccountServiceImpl implements AccountService {
         LOGGER.debug("Starting deleteAccountById method {" + id + "}");
         //TODO find
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    public BigDecimal getBalance(String accountNo) throws AccountNotFoundException {
+        LOGGER.debug("Starting getBalance method { "+accountNo+" }");
+        Account account = accountRepository.findByAccountNo(accountNo);
+        if (account !=null){
+            return account.getBalance();
+        }else {
+            throw new AccountNotFoundException("Your accountNo is wrong and can not find it!!!");
+        }
+    }
+
+    @Override
+    public BigDecimal AddDeposit(AccountDepositDto accountDepositDto) throws AccountNotFoundException {
+        LOGGER.debug("Starting AddDeposit method { "+accountDepositDto.getAccountNo()+" }");
+        Account account = accountRepository.findByAccountNo(accountDepositDto.getAccountNo());
+        if (account != null){
+            account.setBalance(account.getBalance().add(accountDepositDto.getAmount()));
+            Account savedAcc = accountRepository.save(account);
+            return savedAcc.getBalance();
+        }else {
+            throw new AccountNotFoundException("Your accountNo is wrong and can not find it!!!");
+        }
+    }
+
+    @Override
+    public BigDecimal withdrawal(AccountDepositDto accountDepositDto) throws AccountNotFoundException {
+        LOGGER.debug("Starting AddDeposit method { "+accountDepositDto.getAccountNo()+" }");
+        Account account = accountRepository.findByAccountNo(accountDepositDto.getAccountNo());
+        if (account != null){
+            if (account.getBalance().compareTo(accountDepositDto.getAmount()) < 0){
+                throw  new AmountRestrictionException("Balance is not enough!!!");
+            }else {
+                account.setBalance(account.getBalance().subtract(accountDepositDto.getAmount()));
+                return  accountRepository.save(account).getBalance();
+            }
+        }else {
+            throw new AccountNotFoundException("Your accountNo is wrong and can not find it!!!");
+        }
     }
 }
