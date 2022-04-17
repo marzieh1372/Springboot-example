@@ -1,9 +1,13 @@
 package com.example.bank.model.entity;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -24,5 +28,8 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CUSTOMERID", nullable = false)
     private Customer customer;
+
+    @Column(name = "Balance")
+    private BigDecimal balance;
 
 }

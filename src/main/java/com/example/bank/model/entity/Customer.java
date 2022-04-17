@@ -40,7 +40,7 @@ public class Customer {
    @Column(name = "PHONENUMBER")
    private String phone;
 
-   @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL) // har balaie sare pedar omad sare bacheham biad
    private Set<Account> accountSet = new HashSet<>();
 
 }
