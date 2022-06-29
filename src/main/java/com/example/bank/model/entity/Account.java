@@ -1,7 +1,11 @@
 package com.example.bank.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +18,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "ACCOUNT")
+@JsonDeserialize(builder = Account.AccountBuilder.class)
 public class Account {
 
     @Id
@@ -32,4 +38,7 @@ public class Account {
     @Column(name = "Balance")
     private BigDecimal balance;
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class AccountBuilder{}
 }

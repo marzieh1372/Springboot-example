@@ -2,6 +2,7 @@ package com.example.bank.service;
 
 import com.example.bank.exceptions.AccountNotFoundException;
 import com.example.bank.exceptions.AccountRestrictionException;
+import com.example.bank.exceptions.AmountRestrictionException;
 import com.example.bank.exceptions.CustomerNotFoundException;
 import com.example.bank.model.dto.AccountDepositDto;
 import com.example.bank.model.entity.Account;
@@ -96,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findByAccountNo(accountDepositDto.getAccountNo());
         if(account != null){
             if (account.getBalance().compareTo(accountDepositDto.getAmmount()) < 0){
-                throw new AccountRestrictionException("Amount is high! Balance is not enough!");
+                throw new AmountRestrictionException("Amount is high! Balance is not enough!");
             }else {
                 account.setBalance(account.getBalance().subtract(accountDepositDto.getAmmount()));
                 return accountRepository.save(account).getBalance();

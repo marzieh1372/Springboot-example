@@ -1,6 +1,10 @@
 package com.example.bank.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +18,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "CUSTOMER")
+@JsonDeserialize(builder = Customer.CustomerBuilder.class)
 public class Customer {
 
    /* @Embedded
@@ -40,7 +46,19 @@ public class Customer {
    @Column(name = "PHONENUMBER")
    private String phone;
 
+   public Customer(Long id, String userName, String firstName, String lastName, String email, String phone){
+      this.id = id;
+      this.firstName=firstName;
+      this.userName=userName;
+      this.lastName=lastName;
+      this.email=email;
+      this.phone=phone;
+   }
+
    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL) // har balaie sare pedar omad sare bacheham biad
    private Set<Account> accountSet = new HashSet<>();
 
+   @JsonIgnoreProperties(ignoreUnknown = true)
+   @JsonPOJOBuilder(withPrefix = "")
+   public static class CustomerBuilder {}
 }
