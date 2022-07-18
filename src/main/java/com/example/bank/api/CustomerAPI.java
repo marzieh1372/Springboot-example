@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-@Api(tags = {"Account"})
+@Api(tags = {"Customer"})
 @RequestMapping("/customer")
 public interface CustomerAPI {
 
