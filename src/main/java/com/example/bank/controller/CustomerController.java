@@ -34,7 +34,7 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<Customer> addCustomer(Customer customer) {
         //TODO set validation on dto
         log.info("Starting addCustomer method {" + customer.getUserName() + "}");
         Customer savedCustomer = customerService.registerCustomer(customer);
@@ -43,7 +43,7 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") Long customerId) {
+    public ResponseEntity<Customer> getCustomerById(Long customerId) {
         log.info("Starting getCustomerById method {" + customerId + "}");
         Customer customer = customerService.getCustomerById(customerId);
         if (customer != null) {
@@ -66,7 +66,7 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity deleteCustomer(@PathVariable(value = "customerId", required = true) Long customerId) {
+    public ResponseEntity deleteCustomer(Long customerId) {
         log.info("Starting deleteCustomer method {" +customerId + "}");
         customerService.deleteCustomerById(customerId);
         return new ResponseEntity(HttpStatus.OK);
