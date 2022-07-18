@@ -15,7 +15,7 @@ public interface AccountService {
     Account registerAccount(Account account);
     Account updateAccount(Long id, Account account) throws AccountNotFoundException;
     void deleteAccountById(Long id);
-    BigDecimal getBalance(String accountNo) throws AccountNotFoundException;
+    BigDecimal getBalance(Long accountId) throws AccountNotFoundException;
     BigDecimal addDeposit(AccountDepositDto accountDepositDto) throws AccountNotFoundException;
     BigDecimal withdrawal(AccountDepositDto accountDepositDto) throws AccountNotFoundException;
 }

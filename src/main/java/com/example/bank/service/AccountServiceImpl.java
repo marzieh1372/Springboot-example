@@ -1,20 +1,15 @@
 package com.example.bank.service;
 
 import com.example.bank.exceptions.AccountNotFoundException;
-import com.example.bank.exceptions.AccountRestrictionException;
 import com.example.bank.exceptions.AmountRestrictionException;
-import com.example.bank.exceptions.CustomerNotFoundException;
 import com.example.bank.model.dto.AccountDepositDto;
 import com.example.bank.model.entity.Account;
-import com.example.bank.model.entity.Customer;
 import com.example.bank.repo.AccountRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.freemarker.FreeMarkerTemplateAvailabilityProvider;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -68,10 +63,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BigDecimal getBalance(String accountNo) throws AccountNotFoundException {
-        LOGGER.debug("Starting getBalance method {" + accountNo +"}");
-        Account account = accountRepository.findByAccountNo(accountNo);
-        if(account != null){
+    public BigDecimal getBalance(Long accountId) throws AccountNotFoundException {
+        LOGGER.debug("Starting getBalance method {" + accountId +"}");
+        Optional<Account> accountData = accountRepository.findById(accountId);
+        if(accountData != null){
+            Account account = accountData.get();
             return account.getBalance();
         }else {
             throw new AccountNotFoundException("Your account Number is wrong!");

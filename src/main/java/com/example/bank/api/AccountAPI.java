@@ -3,9 +3,6 @@ package com.example.bank.api;
 
 import com.example.bank.model.dto.AccountDto;
 import com.example.bank.model.entity.Account;
-import com.example.bank.model.entity.Customer;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

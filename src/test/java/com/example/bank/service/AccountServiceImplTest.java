@@ -1,9 +1,7 @@
 package com.example.bank.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
@@ -100,21 +98,21 @@ public class AccountServiceImplTest {
 
   @Test
   public void getBalanceTest_ThrowNotFoundException() {
-    given(accountRepository.findByAccountNo("abcde10098")).willThrow(AccountNotFoundException.class);
+    given(accountRepository.findById(12345L)).willThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, () -> accountService.getBalance("abcde10098"));
+    assertThrows(AccountNotFoundException.class, () -> accountService.getBalance(12345L));
   }
 
   @Test
   public void getBalanceTest_Successful() {
-    when(accountRepository.findByAccountNo("abcd123")).thenReturn(getMockAccount());
+    when(accountRepository.findById(1234L)).thenReturn(Optional.ofNullable(getMockAccount()));
 
-    assertEquals("Balance is: ", BigDecimal.valueOf(123.04), accountService.getBalance("abcd123"));
+    assertEquals("Balance is: ", BigDecimal.valueOf(123.04), accountService.getBalance(1234L));
   }
 
   @Test
   public void addDepositTest_throwsAccountNotFoundException() {
-    AccountDepositDto accountDeposit = new AccountDepositDto("MMMnnnn12", BigDecimal.valueOf(1234.0));
+    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"MMMnnnn12", BigDecimal.valueOf(1234.0));
 
     when(accountRepository.findByAccountNo("MMMnnnn12")).thenThrow(AccountNotFoundException.class);
 
@@ -123,7 +121,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void addDepositTest_successful() {
-    AccountDepositDto accountDeposit = new AccountDepositDto("abcd123", BigDecimal.valueOf(24.1));
+    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"abcd123", BigDecimal.valueOf(24.1));
 
     Account resultAccount = getMockAccount();
 
@@ -137,7 +135,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void withdrawalTest_ThrowAccountNotFoundException() {
-    AccountDepositDto accountDeposit = new AccountDepositDto("MMMnnnn12", BigDecimal.valueOf(1234.0));
+    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"MMMnnnn12", BigDecimal.valueOf(1234.0));
 
     when(accountRepository.findByAccountNo("MMMnnnn12")).thenThrow(AccountNotFoundException.class);
 
@@ -146,7 +144,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void withdrawalTest_ThrowAmountRestrictionException() {
-    AccountDepositDto accountDeposit = new AccountDepositDto("abcd123", BigDecimal.valueOf(1234.0));
+    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"abcd123", BigDecimal.valueOf(1234.0));
 
     when(accountRepository.findByAccountNo("abcd123")).thenReturn(getMockAccount());
     assertThrows(AmountRestrictionException.class, () -> accountService.withdrawal(accountDeposit));
@@ -154,7 +152,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void withdrawalTest_successful() {
-    AccountDepositDto accountDeposit = new AccountDepositDto("abcd123", BigDecimal.valueOf(12.0));
+    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"abcd123", BigDecimal.valueOf(12.0));
 
     Account resultAccount = getMockAccount();
     when(accountRepository.findByAccountNo("abcd123")).thenReturn(getMockAccount());
