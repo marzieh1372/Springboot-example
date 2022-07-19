@@ -11,11 +11,11 @@ import java.util.List;
 public interface AccountService {
 
     List<Account> getAllAccount();
-    Account getAccountById(Long id);
+    Account getAccountById(Integer id);
     Account registerAccount(Account account);
-    Account updateAccount(Long id, Account account) throws AccountNotFoundException;
-    void deleteAccountById(Long id);
-    BigDecimal getBalance(Long accountId) throws AccountNotFoundException;
+    Account updateAccount(Integer id, Account account) throws AccountNotFoundException;
+    void deleteAccountById(Integer id);
+    BigDecimal getBalance(Integer accountId) throws AccountNotFoundException;
     BigDecimal addDeposit(AccountDepositDto accountDepositDto) throws AccountNotFoundException;
     BigDecimal withdrawal(AccountDepositDto accountDepositDto) throws AccountNotFoundException;
 }

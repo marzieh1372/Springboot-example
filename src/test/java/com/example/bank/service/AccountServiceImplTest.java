@@ -44,26 +44,26 @@ public class AccountServiceImplTest {
 
   @Test
   public void getAccountByIdTest_When_IdNotFound() {
-    when(accountRepository.findById(12L)).thenThrow(AccountNotFoundException.class);
+    when(accountRepository.findById(12)).thenThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, () -> accountService.getAccountById(12L));
+    assertThrows(AccountNotFoundException.class, () -> accountService.getAccountById(12));
   }
 
   @Test
   public void getAccountByIDTest_OK() {
-    given(accountRepository.findById(1234L)).willReturn(Optional.ofNullable(getMockAccount()));
+    given(accountRepository.findById(1234)).willReturn(Optional.ofNullable(getMockAccount()));
 
-    assertEquals("Accoun nomber is correct!", "abcd123", accountService.getAccountById(1234L).getAccountNo());
+    assertEquals("Accoun nomber is correct!", "abcd123", accountService.getAccountById(1234).getAccountNo());
   }
 
   @Test
   public void registerAccountTest_OK(){
-    Account newAccount = new Account(1234L, "abcd123", new Customer(1234, "MAAS12", "Maryam",
+    Account newAccount = new Account(1234, "abcd123", new Customer(1234, "MAAS12", "Maryam",
         "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
 
     when(accountRepository.save(newAccount)).thenReturn(getMockAccount());
 
-    assertEquals("Account is registered with Id: ", 1234L,
+    assertEquals("Account is registered with Id: ", 1234,
         accountService.registerAccount(newAccount).getId());
 
     assertEquals("Account is registered with account number:", "abcd123",
@@ -72,24 +72,24 @@ public class AccountServiceImplTest {
 
   @Test
   public void updateAccountTest_ThrowNotFoundException() {
-    Account updatedAccount = new Account(9876L, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
+    Account updatedAccount = new Account(9876, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
         "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
 
-    when(accountRepository.findById(9876L)).thenThrow(AccountNotFoundException.class);
+    when(accountRepository.findById(9876)).thenThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, ()-> accountService.updateAccount(9876L, updatedAccount));
+    assertThrows(AccountNotFoundException.class, ()-> accountService.updateAccount(9876, updatedAccount));
   }
 
   @Test
   public void updateAccount_Successful() {
-    Account updatedAccount = new Account(1234L, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
+    Account updatedAccount = new Account(1234, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
         "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
 
-    given(accountRepository.findById(1234L)).willReturn(Optional.of(updatedAccount));
+    given(accountRepository.findById(1234)).willReturn(Optional.of(updatedAccount));
     given(accountRepository.save(updatedAccount)).willReturn(mockAccountToAccount(updatedAccount));
 
     assertEquals("The account number after updating: ", "12vbgdf",
-        accountService.updateAccount(1234L, updatedAccount).getAccountNo());
+        accountService.updateAccount(1234, updatedAccount).getAccountNo());
 
   }
 
@@ -97,16 +97,16 @@ public class AccountServiceImplTest {
 
   @Test
   public void getBalanceTest_ThrowNotFoundException() {
-    given(accountRepository.findById(12345L)).willThrow(AccountNotFoundException.class);
+    given(accountRepository.findById(12345)).willThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, () -> accountService.getBalance(12345L));
+    assertThrows(AccountNotFoundException.class, () -> accountService.getBalance(12345));
   }
 
   @Test
   public void getBalanceTest_Successful() {
-    when(accountRepository.findById(1234L)).thenReturn(Optional.ofNullable(getMockAccount()));
+    when(accountRepository.findById(1234)).thenReturn(Optional.ofNullable(getMockAccount()));
 
-    assertEquals("Balance is: ", BigDecimal.valueOf(123.04), accountService.getBalance(1234L));
+    assertEquals("Balance is: ", BigDecimal.valueOf(123.04), accountService.getBalance(1234));
   }
 
   @Test
@@ -165,14 +165,14 @@ public class AccountServiceImplTest {
 
   private Account getMockAccount(){
     return mockAccount(
-        1234L,
+        1234,
         "abcd123",
         new Customer(1234, "MAAS12", "Maryam",
             "Askari", "abcd@gmail.com", "1234567890"),
         BigDecimal.valueOf(123.04));
   }
 
-  private Account mockAccount(Long id, String accountNo, Customer customer, BigDecimal balance){
+  private Account mockAccount(Integer id, String accountNo, Customer customer, BigDecimal balance){
     return Account.builder()
         .id(id)
         .accountNo(accountNo)

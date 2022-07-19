@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountById(Long id) {
+    public Account getAccountById(Integer id) {
         LOGGER.info("Starting getAccountById method {" + id + "}");
         Optional<Account> accountData = accountRepository.findById(id);
         return accountData.orElse(null);
@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateAccount(Long id, Account account) throws AccountNotFoundException {
+    public Account updateAccount(Integer id, Account account) throws AccountNotFoundException {
         LOGGER.info("Starting updateAccount method {" + id +"}");
         Optional<Account> accountData = accountRepository.findById(id);
         if (accountData.isPresent()) {
@@ -56,14 +56,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteAccountById(Long id) {
+    public void deleteAccountById(Integer id) {
         LOGGER.debug("Starting deleteAccountById method {" + id + "}");
         //TODO find
         accountRepository.deleteById(id);
     }
 
     @Override
-    public BigDecimal getBalance(Long accountId) throws AccountNotFoundException {
+    public BigDecimal getBalance(Integer accountId) throws AccountNotFoundException {
         LOGGER.debug("Starting getBalance method {" + accountId +"}");
         Optional<Account> accountData = accountRepository.findById(accountId);
         if(accountData != null){

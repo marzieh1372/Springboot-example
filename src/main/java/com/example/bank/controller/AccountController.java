@@ -2,12 +2,10 @@ package com.example.bank.controller;
 
 import com.example.bank.api.AccountAPI;
 import com.example.bank.exceptions.AccountNotFoundException;
-import com.example.bank.model.dto.AccountDto;
+import com.example.bank.model.dto.AccountRequest;
 import com.example.bank.model.entity.Account;
 import com.example.bank.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +25,12 @@ public class AccountController implements AccountAPI {
     }
 
     @Override
-    public ResponseEntity updateAccount(AccountDto accountDto) {
-        log.info("Starting updateAccount method {" + accountDto.getId() + "}");
+    public ResponseEntity updateAccount(AccountRequest accountRequest) {
+        log.info("Starting updateAccount method {" + accountRequest.getId() + "}");
         try {
-            Account accountRequest = modelMapper.map(accountDto, Account.class);
-            accountService.updateAccount(accountRequest.getId(), accountRequest);
-            AccountDto accountResponse = modelMapper.map(accountRequest, AccountDto.class);
+            Account account = modelMapper.map(accountRequest, Account.class);
+            accountService.updateAccount(accountRequest.getId(), account);
+            AccountRequest accountResponse = modelMapper.map(accountRequest, AccountRequest.class);
             return new ResponseEntity(HttpStatus.OK);
         } catch (AccountNotFoundException e) {
             log.error(e.getMessage());
@@ -41,20 +39,20 @@ public class AccountController implements AccountAPI {
     }
 
     @Override
-    public ResponseEntity<AccountDto> addAccount(AccountDto accountDto) {
-        log.info("Starting addAccount method {" + accountDto.getAccountNo() + "}");
-        Account accountRequest = modelMapper.map(accountDto, Account.class);
-        Account savedAccount = accountService.registerAccount(accountRequest);
-        AccountDto accountResponse = modelMapper.map(savedAccount, AccountDto.class);
-        return new ResponseEntity<AccountDto>(accountResponse, HttpStatus.CREATED);
+    public ResponseEntity<AccountRequest> addAccount(AccountRequest accountRequest) {
+        log.info("Starting addAccount method {" + accountRequest.getId() + "}");
+        Account account = modelMapper.map(accountRequest, Account.class);
+        Account savedAccount = accountService.registerAccount(account);
+        AccountRequest accountResponse = modelMapper.map(savedAccount, AccountRequest.class);
+        return new ResponseEntity<AccountRequest>(accountResponse, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<AccountDto> getAccountById(Long accountId) {
+    public ResponseEntity<AccountRequest> getAccountById(Integer accountId) {
         log.info("Starting getCustomerById method {" + accountId + "}");
         Account account = accountService.getAccountById(accountId);
         if (account != null) {
-            AccountDto accountResponse = modelMapper.map(account, AccountDto.class);
+            AccountRequest accountResponse = modelMapper.map(account, AccountRequest.class);
             return new ResponseEntity<>(accountResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -62,7 +60,7 @@ public class AccountController implements AccountAPI {
     }
 
     @Override
-    public ResponseEntity deleteAccount(Long accountId) {
+    public ResponseEntity deleteAccount(Integer accountId) {
         log.info("Starting deleteCustomer method {" + accountId + "}");
         accountService.deleteAccountById(accountId);
         return new ResponseEntity(HttpStatus.OK);

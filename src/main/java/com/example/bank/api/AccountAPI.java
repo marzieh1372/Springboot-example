@@ -1,7 +1,7 @@
 package com.example.bank.api;
 
 
-import com.example.bank.model.dto.AccountDto;
+import com.example.bank.model.dto.AccountRequest;
 import com.example.bank.model.entity.Account;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,13 +28,13 @@ public interface AccountAPI {
   @Operation(summary = "Update an existing account")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK!", content = {@Content(mediaType = "application/json"
-          , schema = @Schema(implementation = AccountDto.class))}),
+          , schema = @Schema(implementation = AccountRequest.class))}),
       @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
       @ApiResponse(responseCode = "404", description = "Account not found", content = @Content),
       @ApiResponse(responseCode = "405", description = "Validation exception", content = @Content)})
   @PutMapping("/update-account")
-  ResponseEntity updateAccount(@Valid @ApiParam(value = "Customer for updating", required = true)
-                                            AccountDto accountDto);
+  ResponseEntity updateAccount(@Valid @ApiParam(value = "Account for updating", required = true)
+                                   AccountRequest accountRequest);
 
   @Operation(summary = "Add a new account")
   @ApiResponses(value = {
@@ -43,8 +43,8 @@ public interface AccountAPI {
       @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
       @ApiResponse(responseCode = "404", description = "Not found!", content = @Content)})
   @PostMapping("add-account")
-  ResponseEntity<AccountDto> addAccount(@ApiParam(required = true)
-                                               @RequestBody AccountDto accountDto);
+  ResponseEntity<AccountRequest> addAccount(@ApiParam(required = true)
+                                               @RequestBody AccountRequest accountRequest);
 
   @Operation(summary = "Find account by ID", description = "Returns a single account")
   @ApiResponses(value = {
@@ -53,14 +53,14 @@ public interface AccountAPI {
       @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
       @ApiResponse(responseCode = "404", description = "Account not found")})
   @GetMapping("/get-account/{accountId}")
-  ResponseEntity<AccountDto> getAccountById(@ApiParam(value = "ID of account to return", required = true)
-                                                   @PathVariable("accountId") Long accountId);
+  ResponseEntity<AccountRequest> getAccountById(@ApiParam(value = "ID of account to return", example = "64",required = true)
+                                                   @PathVariable("accountId") Integer accountId);
 
   @Operation(summary = "Deletes an account")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
       @ApiResponse(responseCode = "404", description = "Account not found")})
   @DeleteMapping("/delete-account/{accountId}")
-  ResponseEntity deleteAccount(@ApiParam(value = "Account id to delete")
-                                      @PathVariable("accountId") Long accountId);
+  ResponseEntity deleteAccount(@ApiParam(value = "Account id to delete", example = "64", required = true)
+                                      @PathVariable("accountId") Integer accountId);
 }
