@@ -8,8 +8,8 @@ import java.util.List;
 public interface CustomerService {
 
     List<Customer> getAllCustomer();
-    Customer getCustomerById(Long id);
+    Customer getCustomerById(Integer id);
     Customer registerCustomer(Customer customer);
-    Customer updateCustomer(Long id, Customer customer) throws CustomerNotFoundException;
-    void deleteCustomerById(Long id);
+    Customer updateCustomer(Integer id, Customer customer) throws CustomerNotFoundException;
+    void deleteCustomerById(Integer id);
 }

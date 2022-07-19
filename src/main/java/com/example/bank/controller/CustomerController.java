@@ -43,7 +43,7 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity<Customer> getCustomerById(Long customerId) {
+    public ResponseEntity<Customer> getCustomerById(Integer customerId) {
         log.info("Starting getCustomerById method {" + customerId + "}");
         Customer customer = customerService.getCustomerById(customerId);
         if (customer != null) {
@@ -66,7 +66,7 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity deleteCustomer(Long customerId) {
+    public ResponseEntity deleteCustomer(Integer customerId) {
         log.info("Starting deleteCustomer method {" +customerId + "}");
         customerService.deleteCustomerById(customerId);
         return new ResponseEntity(HttpStatus.OK);

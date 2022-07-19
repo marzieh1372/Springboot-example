@@ -29,7 +29,7 @@ public class Customer {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
    @Column(name = "ID")
-   private Long id;
+   private Integer id;
 
    @Column(name = "USERNAME", nullable = false, unique = true)
    private String userName;
@@ -46,7 +46,7 @@ public class Customer {
    @Column(name = "PHONENUMBER")
    private String phone;
 
-   public Customer(Long id, String userName, String firstName, String lastName, String email, String phone){
+   public Customer(Integer id, String userName, String firstName, String lastName, String email, String phone){
       this.id = id;
       this.firstName=firstName;
       this.userName=userName;

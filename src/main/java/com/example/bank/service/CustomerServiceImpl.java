@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Customer getCustomerById(Long id) {
+    public Customer getCustomerById(Integer id) {
         log.info("Starting getCustomerById method {" + id + "}");
         Optional<Customer> customerData = customerRepository.findById(id);
         return customerData.orElse(null);
@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Customer updateCustomer(Long id, Customer customer) throws CustomerNotFoundException {
+    public Customer updateCustomer(Integer id, Customer customer) throws CustomerNotFoundException {
         log.info("Starting updateCustomer method {" + id + "}");
         Optional<Customer> customerData = customerRepository.findById(id);
         if (customerData.isPresent()) {
@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void deleteCustomerById(Long id) {
+    public void deleteCustomerById(Integer id) {
         log.debug("Starting deleteCustomerById method {" + id + "}");
         //TODO find
         customerRepository.deleteById(id);

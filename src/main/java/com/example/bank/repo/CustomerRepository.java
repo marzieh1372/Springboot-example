@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer,Long> {
+public interface CustomerRepository extends JpaRepository<Customer,Integer> {
    // @Query(value = "select * from customer where firstname=?",nativeQuery = true)
     List<Customer> findByFirstName(String firstName);
 }

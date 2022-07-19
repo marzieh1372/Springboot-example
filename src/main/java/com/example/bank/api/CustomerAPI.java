@@ -1,8 +1,6 @@
 package com.example.bank.api;
 
 import com.example.bank.model.entity.Customer;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -54,7 +52,7 @@ public interface CustomerAPI {
       @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)})
   @GetMapping("/find-customer/{customerId}")
   ResponseEntity<Customer> getCustomerById(@ApiParam(value = "Id of customer", required = true)
-                                                  @PathVariable("customerId") Long customerId);
+                                                  @PathVariable("customerId") Integer customerId);
   @Operation(summary = "Update an existing customer")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK!", content = {@Content(mediaType = "application/json"
@@ -71,5 +69,5 @@ public interface CustomerAPI {
       @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)})
   @DeleteMapping("/delete-customer/{customerId}")
   ResponseEntity deleteCustomer(@ApiParam(value = "customer id for deleting", required = true)
-                                       @PathVariable(value = "customerId") Long customerId);
+                                       @PathVariable(value = "customerId") Integer customerId);
 }

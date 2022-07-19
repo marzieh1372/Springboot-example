@@ -15,7 +15,6 @@ import com.example.bank.model.entity.Customer;
 import com.example.bank.repo.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -59,7 +58,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void registerAccountTest_OK(){
-    Account newAccount = new Account(1234L, "abcd123", new Customer(1234L, "MAAS12", "Maryam",
+    Account newAccount = new Account(1234L, "abcd123", new Customer(1234, "MAAS12", "Maryam",
         "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
 
     when(accountRepository.save(newAccount)).thenReturn(getMockAccount());
@@ -73,7 +72,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void updateAccountTest_ThrowNotFoundException() {
-    Account updatedAccount = new Account(9876L, "12vbgdf", new Customer(9876000L, "MAAS12", "Maryam",
+    Account updatedAccount = new Account(9876L, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
         "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
 
     when(accountRepository.findById(9876L)).thenThrow(AccountNotFoundException.class);
@@ -83,7 +82,7 @@ public class AccountServiceImplTest {
 
   @Test
   public void updateAccount_Successful() {
-    Account updatedAccount = new Account(1234L, "12vbgdf", new Customer(9876000L, "MAAS12", "Maryam",
+    Account updatedAccount = new Account(1234L, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
         "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
 
     given(accountRepository.findById(1234L)).willReturn(Optional.of(updatedAccount));
@@ -168,7 +167,7 @@ public class AccountServiceImplTest {
     return mockAccount(
         1234L,
         "abcd123",
-        new Customer(1234L, "MAAS12", "Maryam",
+        new Customer(1234, "MAAS12", "Maryam",
             "Askari", "abcd@gmail.com", "1234567890"),
         BigDecimal.valueOf(123.04));
   }
