@@ -19,5 +19,5 @@ public class Deposit {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   @JsonPOJOBuilder(withPrefix = "")
-  public static final class DepositBuilder{}
+  public static class DepositBuilder{}
 }

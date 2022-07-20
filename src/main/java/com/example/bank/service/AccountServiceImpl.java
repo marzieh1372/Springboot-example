@@ -6,65 +6,63 @@ import com.example.bank.model.dto.Deposit;
 import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.model.entity.Account;
 import com.example.bank.repo.AccountRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
-
-    private static final Logger LOGGER = LogManager.getLogger(AccountServiceImpl.class);
 
     @Autowired
     private AccountRepository accountRepository;
 
     @Override
     public List<Account> getAllAccount() {
-        LOGGER.info("Starting getAllAccount method {}");
+        log.info("Starting getAllAccount method {}");
         return accountRepository.findAll();
     }
 
     @Override
     public Account getAccountById(Integer id) {
-        LOGGER.info("Starting getAccountById method {" + id + "}");
+        log.info("Starting getAccountById method {" + id + "}");
         Optional<Account> accountData = accountRepository.findById(id);
         return accountData.orElse(null);
     }
 
     @Override
     public Account registerAccount(Account account) {
-        LOGGER.info("Starting registerAccount method {" + account.getAccountNo() + "}");
+        log.info("Starting registerAccount method {" + account.getAccountNo() + "}");
         return accountRepository.save(account);
     }
 
     @Override
     public Account updateAccount(Integer id, Account account) throws AccountNotFoundException {
-        LOGGER.info("Starting updateAccount method {" + id +"}");
+        log.info("Starting updateAccount method {" + id +"}");
         Optional<Account> accountData = accountRepository.findById(id);
         if (accountData.isPresent()) {
             Account updatedAccount = accountData.get();
             updatedAccount.setAccountNo(account.getAccountNo());
             return accountRepository.save(updatedAccount);
         }else {
-            LOGGER.error("Could not find account!!!!! , Id is wrong : " + id);
+            log.error("Could not find account!!!!! , Id is wrong : " + id);
             throw new AccountNotFoundException("Could not find account with id: " + id);
         }
     }
 
     @Override
     public void deleteAccountById(Integer id) {
-        LOGGER.debug("Starting deleteAccountById method {" + id + "}");
+        log.debug("Starting deleteAccountById method {" + id + "}");
         //TODO find
         accountRepository.deleteById(id);
     }
 
     @Override
     public Double getBalance(Integer accountId) throws AccountNotFoundException {
-        LOGGER.debug("Starting getBalance method {" + accountId +"}");
+        log.debug("Starting getBalance method {" + accountId +"}");
         Optional<Account> accountData = accountRepository.findById(accountId);
         if(accountData != null){
             Account account = accountData.get();
@@ -76,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Double addDeposit(Integer accountId,Deposit deposit) throws AccountNotFoundException {
-        LOGGER.debug("Starting addDeposit method {"+ accountId +"}");
+        log.debug("Starting addDeposit method {"+ accountId +"}");
         Optional<Account> accountData = accountRepository.findById(accountId);
         if(accountData != null){
             Account account = accountData.get();
@@ -90,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Double withdrawal(Integer accountId, Withdrawal withdrawal) throws AccountNotFoundException {
-        LOGGER.debug("Starting withdrawal Method {" + accountId + "}");
+        log.debug("Starting withdrawal Method {" + accountId + "}");
         Optional<Account> accountData = accountRepository.findById(accountId);
         if(accountData != null){
             Account account = accountData.get();

@@ -20,5 +20,5 @@ public class Withdrawal {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   @JsonPOJOBuilder(withPrefix = "")
-  public static final class WithdrawalBuilder{}
+  public static class WithdrawalBuilder{}
 }

@@ -34,7 +34,7 @@ public interface AccountAPI {
       @ApiResponse(responseCode = "405", description = "Validation exception", content = @Content)})
   @PutMapping("/update-account")
   ResponseEntity updateAccount(@Valid @ApiParam(value = "Account for updating", required = true)
-                                   AccountRequest accountRequest);
+                               @RequestBody AccountRequest accountRequest);
 
   @Operation(summary = "Add a new account")
   @ApiResponses(value = {
@@ -42,7 +42,7 @@ public interface AccountAPI {
           , schema = @Schema(implementation = Account.class))}),
       @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
       @ApiResponse(responseCode = "404", description = "Not found!", content = @Content)})
-  @PostMapping("add-account")
+  @PostMapping("/add-account")
   ResponseEntity<AccountRequest> addAccount(@ApiParam(required = true)
                                                @RequestBody AccountRequest accountRequest);
 
