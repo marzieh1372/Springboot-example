@@ -36,7 +36,7 @@ public class Account {
     private Customer customer;
 
     @Column(name = "Balance")
-    private BigDecimal balance;
+    private Double balance;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonPOJOBuilder(withPrefix = "")

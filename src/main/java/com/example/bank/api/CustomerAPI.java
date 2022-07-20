@@ -1,5 +1,6 @@
 package com.example.bank.api;
 
+import com.example.bank.model.dto.CustomerRequest;
 import com.example.bank.model.entity.Customer;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +43,7 @@ public interface CustomerAPI {
       @ApiResponse(responseCode = "405", description = "Invalid input", content = @Content)})
   @PostMapping("/add-customer")
   ResponseEntity<Customer> addCustomer(@ApiParam(value = "New customer to add", required = true)
-                                              @Valid @RequestBody Customer customer);
+                                              @Valid @RequestBody CustomerRequest customerRequest);
 
   @Operation(summary = "Find customer by ID", description = "Return a single customer")
   @ApiResponses(value = {
@@ -61,7 +62,7 @@ public interface CustomerAPI {
       @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content),
       @ApiResponse(responseCode = "500", description = "Validation exception", content = @Content)})
   @PutMapping("/update-customer")
-  ResponseEntity updateCustomer(@ApiParam(value = "Customer for updating", required = true) Customer customer);
+  ResponseEntity updateCustomer(@ApiParam(value = "Customer for updating", required = true) CustomerRequest customerRequest);
 
   @Operation(summary = "Deletes a customer")
   @ApiResponses(value = {

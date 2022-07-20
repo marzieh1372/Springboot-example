@@ -2,7 +2,8 @@ package com.example.bank.service;
 
 import com.example.bank.exceptions.AccountNotFoundException;
 import com.example.bank.exceptions.AmountRestrictionException;
-import com.example.bank.model.dto.AccountDepositDto;
+import com.example.bank.model.dto.Deposit;
+import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.model.entity.Account;
 import com.example.bank.repo.AccountRepository;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BigDecimal getBalance(Integer accountId) throws AccountNotFoundException {
+    public Double getBalance(Integer accountId) throws AccountNotFoundException {
         LOGGER.debug("Starting getBalance method {" + accountId +"}");
         Optional<Account> accountData = accountRepository.findById(accountId);
         if(accountData != null){
@@ -75,11 +75,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BigDecimal addDeposit(AccountDepositDto accountDepositDto) throws AccountNotFoundException {
-        LOGGER.debug("Starting addDeposit method {" + accountDepositDto.getAccountNo() + "}");
-        Account account = accountRepository.findByAccountNo(accountDepositDto.getAccountNo());
-        if(account != null){
-            account.setBalance(account.getBalance().add(accountDepositDto.getAmmount()));
+    public Double addDeposit(Integer accountId,Deposit deposit) throws AccountNotFoundException {
+        LOGGER.debug("Starting addDeposit method {"+ accountId +"}");
+        Optional<Account> accountData = accountRepository.findById(accountId);
+        if(accountData != null){
+            Account account = accountData.get();
+            account.setBalance(account.getBalance()+(deposit.getAmount()));
             Account savedAccount = accountRepository.save(account);
             return savedAccount.getBalance();
         }else {
@@ -88,14 +89,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BigDecimal withdrawal(AccountDepositDto accountDepositDto) throws AccountNotFoundException {
-        LOGGER.debug("Starting withdrawal Method {" + accountDepositDto.getAccountNo() + "}");
-        Account account = accountRepository.findByAccountNo(accountDepositDto.getAccountNo());
-        if(account != null){
-            if (account.getBalance().compareTo(accountDepositDto.getAmmount()) < 0){
+    public Double withdrawal(Integer accountId, Withdrawal withdrawal) throws AccountNotFoundException {
+        LOGGER.debug("Starting withdrawal Method {" + accountId + "}");
+        Optional<Account> accountData = accountRepository.findById(accountId);
+        if(accountData != null){
+            Account account = accountData.get();
+            if (account.getBalance().compareTo(withdrawal.getAmount()) < 0){
                 throw new AmountRestrictionException("Amount is high! Balance is not enough!");
             }else {
-                account.setBalance(account.getBalance().subtract(accountDepositDto.getAmmount()));
+                account.setBalance(account.getBalance() - (withdrawal.getAmount()));
                 return accountRepository.save(account).getBalance();
             }
         }else {

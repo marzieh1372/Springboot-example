@@ -2,9 +2,11 @@ package com.example.bank.controller;
 
 import com.example.bank.api.CustomerAPI;
 import com.example.bank.exceptions.CustomerNotFoundException;
+import com.example.bank.model.dto.CustomerRequest;
 import com.example.bank.model.entity.Customer;
 import com.example.bank.service.CustomerServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.util.List;
 @Slf4j
 @RestController
 public class CustomerController implements CustomerAPI {
+
+    private ModelMapper modelMapper;
 
     @Autowired
     private CustomerServiceImpl customerService;
@@ -34,9 +38,10 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity<Customer> addCustomer(Customer customer) {
+    public ResponseEntity<Customer> addCustomer(CustomerRequest customerRequest) {
         //TODO set validation on dto
-        log.info("Starting addCustomer method {" + customer.getUserName() + "}");
+        log.info("Starting addCustomer method {" + customerRequest.getId() + "}");
+        Customer customer= modelMapper.map(customerRequest,Customer.class);
         Customer savedCustomer = customerService.registerCustomer(customer);
         return new ResponseEntity<Customer>(savedCustomer, HttpStatus.CREATED);
 
@@ -54,9 +59,10 @@ public class CustomerController implements CustomerAPI {
     }
 
     @Override
-    public ResponseEntity updateCustomer(Customer customer) {
-        log.info("Starting updateCustomer method {" + customer.getId() + "}");
+    public ResponseEntity updateCustomer(CustomerRequest customerRequest) {
+        log.info("Starting updateCustomer method {" + customerRequest.getId() + "}");
         try {
+            Customer customer = modelMapper.map(customerRequest, Customer.class);
             customerService.updateCustomer(customer.getId(),customer);
             return new ResponseEntity(HttpStatus.OK);
         } catch (CustomerNotFoundException e) {

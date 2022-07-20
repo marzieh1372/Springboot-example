@@ -3,7 +3,8 @@ package com.example.bank.controller;
 import com.example.bank.api.BankAPI;
 import com.example.bank.exceptions.AccountNotFoundException;
 import com.example.bank.exceptions.AccountRestrictionException;
-import com.example.bank.model.dto.AccountDepositDto;
+import com.example.bank.model.dto.Deposit;
+import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,30 +26,30 @@ public class BankController implements BankAPI {
     }
 
     @Override
-    public ResponseEntity<BigDecimal> getBalance(AccountDepositDto AccountDepositDto){
-        log.info("Starting getBalance method {" + AccountDepositDto.getAccountNo() +"}");
+    public ResponseEntity<Double> getBalance(Integer accountId){
+        log.info("Starting getBalance method {" + accountId +"}");
         try{
-            return new ResponseEntity<BigDecimal>(accountService.getBalance(AccountDepositDto.getAccountId()), HttpStatus.OK);
+            return new ResponseEntity<Double>(accountService.getBalance(accountId), HttpStatus.OK);
         } catch (AccountNotFoundException e){
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public ResponseEntity depositToAccount(AccountDepositDto accountDepositDto){
-        log.info("Starting depositToAccount method {" + accountDepositDto.getAccountNo() +"}");
+    public ResponseEntity depositToAccount(Integer accountId, Deposit deposit){
+        log.info("Starting depositToAccount method {" + accountId +"}");
         try {
-            return new ResponseEntity<BigDecimal>(accountService.addDeposit(accountDepositDto), HttpStatus.OK);
+            return new ResponseEntity<Double>(accountService.addDeposit(accountId, deposit), HttpStatus.OK);
         }catch (AccountNotFoundException e){
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public ResponseEntity withdrawal(AccountDepositDto accountDepositDto){
-        log.info("Starting withdrawal method {" + accountDepositDto.getAccountNo() + "}");
+    public ResponseEntity withdrawal(Integer accountId, Withdrawal withdrawal){
+        log.info("Starting withdrawal method {" + accountId + "}");
         try{
-            return new ResponseEntity<BigDecimal>(accountService.withdrawal(accountDepositDto), HttpStatus.OK);
+            return new ResponseEntity<Double>(accountService.withdrawal(accountId, withdrawal), HttpStatus.OK);
         }catch (AccountNotFoundException e){
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }catch (AccountRestrictionException ex){

@@ -8,8 +8,9 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 import com.example.bank.exceptions.AccountNotFoundException;
 import com.example.bank.exceptions.AmountRestrictionException;
-import com.example.bank.model.dto.AccountDepositDto;
 
+import com.example.bank.model.dto.Deposit;
+import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.model.entity.Account;
 import com.example.bank.model.entity.Customer;
 import com.example.bank.repo.AccountRepository;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @ExtendWith(value = MockitoExtension.class)
 public class AccountServiceImplTest {
+  private static final Integer ACCOUNT_ID = 1234;
 
   @Mock
   AccountRepository accountRepository;
@@ -59,7 +61,7 @@ public class AccountServiceImplTest {
   @Test
   public void registerAccountTest_OK(){
     Account newAccount = new Account(1234, "abcd123", new Customer(1234, "MAAS12", "Maryam",
-        "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
+        "Askari", "abcd@gmail.com", "1234567890"), 10000.0);
 
     when(accountRepository.save(newAccount)).thenReturn(getMockAccount());
 
@@ -73,7 +75,7 @@ public class AccountServiceImplTest {
   @Test
   public void updateAccountTest_ThrowNotFoundException() {
     Account updatedAccount = new Account(9876, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
-        "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
+        "Askari", "abcd@gmail.com", "1234567890"), 10000.0);
 
     when(accountRepository.findById(9876)).thenThrow(AccountNotFoundException.class);
 
@@ -83,7 +85,7 @@ public class AccountServiceImplTest {
   @Test
   public void updateAccount_Successful() {
     Account updatedAccount = new Account(1234, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
-        "Askari", "abcd@gmail.com", "1234567890"), BigDecimal.valueOf(123.04));
+        "Askari", "abcd@gmail.com", "1234567890"), 10000.0);
 
     given(accountRepository.findById(1234)).willReturn(Optional.of(updatedAccount));
     given(accountRepository.save(updatedAccount)).willReturn(mockAccountToAccount(updatedAccount));
@@ -106,73 +108,73 @@ public class AccountServiceImplTest {
   public void getBalanceTest_Successful() {
     when(accountRepository.findById(1234)).thenReturn(Optional.ofNullable(getMockAccount()));
 
-    assertEquals("Balance is: ", BigDecimal.valueOf(123.04), accountService.getBalance(1234));
+    assertEquals("Balance is: ", 20000.0, accountService.getBalance(1234));
   }
 
   @Test
   public void addDepositTest_throwsAccountNotFoundException() {
-    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"MMMnnnn12", BigDecimal.valueOf(1234.0));
+    Deposit deposit = Deposit.builder().amount(10000.0).build();
 
-    when(accountRepository.findByAccountNo("MMMnnnn12")).thenThrow(AccountNotFoundException.class);
+    when(accountRepository.findById(any())).thenThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, ()->accountService.addDeposit(accountDeposit));
+    assertThrows(AccountNotFoundException.class, ()->accountService.addDeposit(ACCOUNT_ID, deposit));
   }
 
   @Test
   public void addDepositTest_successful() {
-    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"abcd123", BigDecimal.valueOf(24.1));
+    Deposit deposit = Deposit.builder().amount(10000.0).build();
 
     Account resultAccount = getMockAccount();
 
-    when(accountRepository.findByAccountNo("abcd123")).thenReturn(getMockAccount());
-    resultAccount.setBalance(resultAccount.getBalance().add(accountDeposit.getAmmount()));
+    when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.ofNullable(getMockAccount()));
+    resultAccount.setBalance(resultAccount.getBalance() + (deposit.getAmount()));
     when(accountRepository.save(any())).thenReturn(resultAccount);
 
-    assertEquals("new ammount is: ",BigDecimal.valueOf(147.14), accountService.addDeposit(accountDeposit));
+    assertEquals("new ammount is: ",30000.0, accountService.addDeposit(ACCOUNT_ID, deposit));
 
   }
 
   @Test
   public void withdrawalTest_ThrowAccountNotFoundException() {
-    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"MMMnnnn12", BigDecimal.valueOf(1234.0));
+    Withdrawal withdrawal = Withdrawal.builder().amount(10000.0).build();
 
-    when(accountRepository.findByAccountNo("MMMnnnn12")).thenThrow(AccountNotFoundException.class);
+    when(accountRepository.findById(ACCOUNT_ID)).thenThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, ()->accountService.withdrawal(accountDeposit));
+    assertThrows(AccountNotFoundException.class, ()->accountService.withdrawal(ACCOUNT_ID,withdrawal));
   }
 
   @Test
   public void withdrawalTest_ThrowAmountRestrictionException() {
-    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"abcd123", BigDecimal.valueOf(1234.0));
+    Withdrawal withdrawal = Withdrawal.builder().amount(100000.0).build();
 
-    when(accountRepository.findByAccountNo("abcd123")).thenReturn(getMockAccount());
-    assertThrows(AmountRestrictionException.class, () -> accountService.withdrawal(accountDeposit));
+    when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.ofNullable(getMockAccount()));
+    assertThrows(AmountRestrictionException.class, () -> accountService.withdrawal(ACCOUNT_ID, withdrawal));
   }
 
   @Test
   public void withdrawalTest_successful() {
-    AccountDepositDto accountDeposit = new AccountDepositDto(1234L,"abcd123", BigDecimal.valueOf(12.0));
+    Withdrawal withdrawal = Withdrawal.builder().amount(10000.0).build();
 
     Account resultAccount = getMockAccount();
-    when(accountRepository.findByAccountNo("abcd123")).thenReturn(getMockAccount());
+    when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.ofNullable(getMockAccount()));
 
-    resultAccount.setBalance(resultAccount.getBalance().subtract(accountDeposit.getAmmount()));
+    resultAccount.setBalance(resultAccount.getBalance() - (withdrawal.getAmount()));
 
     when(accountRepository.save(any())).thenReturn(resultAccount);
 
-    assertEquals("New balance after withdrawal is:", BigDecimal.valueOf(111.04), accountService.withdrawal(accountDeposit));
+    assertEquals("New balance after withdrawal is:", 10000.0, accountService.withdrawal(ACCOUNT_ID, withdrawal));
   }
 
   private Account getMockAccount(){
     return mockAccount(
-        1234,
+        ACCOUNT_ID,
         "abcd123",
         new Customer(1234, "MAAS12", "Maryam",
             "Askari", "abcd@gmail.com", "1234567890"),
-        BigDecimal.valueOf(123.04));
+        20000.0);
   }
 
-  private Account mockAccount(Integer id, String accountNo, Customer customer, BigDecimal balance){
+  private Account mockAccount(Integer id, String accountNo, Customer customer, Double balance){
     return Account.builder()
         .id(id)
         .accountNo(accountNo)
