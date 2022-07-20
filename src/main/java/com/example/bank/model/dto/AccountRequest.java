@@ -23,6 +23,6 @@ public class AccountRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonPOJOBuilder(withPrefix = "")
-    public static final class AccountRequestBuilder {
+    public static class AccountRequestBuilder {
     }
 }

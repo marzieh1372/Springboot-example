@@ -36,5 +36,5 @@ public class CustomerRequest {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   @JsonPOJOBuilder(withPrefix = "")
-  public static final class CustomerRequestBuilder{}
+  public static class CustomerRequestBuilder{}
 }
