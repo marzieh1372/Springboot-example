@@ -8,11 +8,18 @@ import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -20,10 +27,9 @@ public class BankController implements BankAPI {
 
     private ModelMapper modelMapper;
 
-    private AccountService accountService;
-    public BankController(AccountService accountService){
-        this.accountService = accountService;
-    }
+    @Autowired
+    @Qualifier("accountServiceImpl")
+    AccountService accountService;
 
     @Override
     public ResponseEntity<Double> getBalance(Integer accountId){
@@ -55,6 +61,17 @@ public class BankController implements BankAPI {
         }catch (AccountRestrictionException ex){
             return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String,String> handleValidationException(MethodArgumentNotValidException ex){
+        log.debug("Gole sangam****************");
+        Map<String,String> map=new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error)->{
+            map.put(error.getCode(),error.getDefaultMessage());
+        });
+        return map;
     }
 
 }

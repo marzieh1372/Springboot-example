@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Tag(name = "Account")
 @RequestMapping("/account")
@@ -63,4 +64,14 @@ public interface AccountAPI {
   @DeleteMapping("/delete-account/{accountId}")
   ResponseEntity deleteAccount(@ApiParam(value = "Account id to delete", example = "64", required = true)
                                       @PathVariable("accountId") Integer accountId);
+
+
+    @Operation(summary = "Get All Accounts", description = "Returns list of account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK!",
+                    content = {@Content(mediaType = "application/xml"
+                    , schema = @Schema(implementation = List.class))})})
+    @GetMapping("/get-accounts")
+    ResponseEntity<List<Account>> getAllAccounts();
+
 }

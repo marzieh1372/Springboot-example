@@ -7,9 +7,14 @@ import com.example.bank.model.entity.Account;
 import com.example.bank.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @Slf4j
@@ -19,10 +24,16 @@ public class AccountController implements AccountAPI {
 
     private ModelMapper modelMapper;
 
-    private final AccountService accountService;
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    @Autowired
+    @Qualifier("accountServiceImpl")
+    AccountService accountService;
+
+
+    //private  AccountService accountServiceImpl;
+
+    //public AccountController(AccountService accountService) {
+      //  this.accountService = accountService;
+   // }
 
     @Override
     public ResponseEntity updateAccount(AccountRequest accountRequest) {
@@ -64,5 +75,10 @@ public class AccountController implements AccountAPI {
         log.info("Starting deleteCustomer method {" + accountId + "}");
         accountService.deleteAccountById(accountId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Account>> getAllAccounts() {
+        return new ResponseEntity(accountService.getAllAccount(),HttpStatus.OK);
     }
 }

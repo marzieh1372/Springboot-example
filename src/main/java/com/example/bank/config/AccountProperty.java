@@ -11,13 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableConfigurationProperties
-@ConfigurationProperties
+@ConfigurationProperties(prefix = "account")
 @Getter
 @Setter
-public class YAMLConfig {
-  private String name;
-  private String environment;
-  private boolean enabled;
-  private List<String> servers = new ArrayList<>();
+public class AccountProperty {
+    private Double charity;
+
 }

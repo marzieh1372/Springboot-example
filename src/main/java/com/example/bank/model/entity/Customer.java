@@ -8,8 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,15 +35,19 @@ public class Customer {
    private Integer id;
 
    @Column(name = "USERNAME", nullable = false, unique = true)
+   @NotBlank(message = "ahay ahay username!!!!!")
+   @Size(min = 4,max = 12)
    private String userName;
 
    @Column(name = "FIRSTNAME")
+   @NotNull(message = "heyyyyyyyyyyyyyyyy")
    private String firstName;
 
    @Column(name = "LASTNAME")
    private String lastName;
 
    @Column(name = "EMAIL")
+  // @Email(message = "Ahay ahay email !!!")
    private String email;
 
    @Column(name = "PHONENUMBER")
