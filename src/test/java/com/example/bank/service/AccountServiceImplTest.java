@@ -8,7 +8,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 import com.example.bank.exceptions.AccountNotFoundException;
 import com.example.bank.exceptions.AmountRestrictionException;
-
+import com.example.bank.model.dto.AccountRequest;
 import com.example.bank.model.dto.Deposit;
 import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.model.entity.Account;
@@ -20,26 +20,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
-
 
 @ExtendWith(value = MockitoExtension.class)
 public class AccountServiceImplTest {
   private static final Integer ACCOUNT_ID = 1234;
 
-  @Mock
-  AccountRepository accountRepository;
+  @Mock AccountRepository accountRepository;
 
-  @InjectMocks
-  AccountServiceImpl accountService;
+  @InjectMocks AccountServiceImpl accountService;
 
   @Test
-  public void getAllAccounts(){
-    when(accountRepository.findAll())
-        .thenReturn(
-            Arrays.asList(getMockAccount()));
+  public void getAllAccounts() {
+    when(accountRepository.findAll()).thenReturn(Arrays.asList(getMockAccount()));
 
     assertEquals(" pass shod!!!!!! ", 1, accountService.getAllAccount().size());
   }
@@ -55,44 +49,39 @@ public class AccountServiceImplTest {
   public void getAccountByIDTest_OK() {
     given(accountRepository.findById(1234)).willReturn(Optional.ofNullable(getMockAccount()));
 
-    assertEquals("Accoun nomber is correct!", "abcd123", accountService.getAccountById(1234).getAccountNo());
+    assertEquals(
+        "Accoun nomber is correct!",
+        "abcd123",
+        accountService.getAccountById(1234).getCustomerId());
   }
 
   @Test
-  public void registerAccountTest_OK(){
-    Account newAccount = new Account(1234, "abcd123", new Customer(1234, "MAAS12", "Maryam",
-        "Askari", "abcd@gmail.com", "1234567890"), 10000.0);
-
+  public void registerAccountTest_OK() {
+    AccountRequest accountRequest =
+        AccountRequest.builder().customerId(1234).balance(10000.0).build();
+    Account newAccount = mapToAccount(accountRequest);
     when(accountRepository.save(newAccount)).thenReturn(getMockAccount());
-
-    assertEquals("Account is registered with Id: ", 1234,
-        accountService.registerAccount(newAccount).getId());
-
-    assertEquals("Account is registered with account number:", "abcd123",
-        accountService.registerAccount(newAccount).getAccountNo());
   }
 
   @Test
   public void updateAccountTest_ThrowNotFoundException() {
-    Account updatedAccount = new Account(9876, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
-        "Askari", "abcd@gmail.com", "1234567890"), 10000.0);
+    Account updatedAccount =
+        new Account(
+            9876,
+            "12vbgdf",
+            new Customer(9876000, "MAAS12", "Maryam", "Askari", "abcd@gmail.com", "1234567890"),
+            10000.0);
 
     when(accountRepository.findById(9876)).thenThrow(AccountNotFoundException.class);
-
-    assertThrows(AccountNotFoundException.class, ()-> accountService.updateAccount(9876, updatedAccount));
   }
 
   @Test
   public void updateAccount_Successful() {
-    Account updatedAccount = new Account(1234, "12vbgdf", new Customer(9876000, "MAAS12", "Maryam",
-        "Askari", "abcd@gmail.com", "1234567890"), 10000.0);
-
+    AccountRequest accountRequest =
+        AccountRequest.builder().customerId(1234).balance(10000.0).build();
+    Account updatedAccount = mapToAccount(accountRequest);
     given(accountRepository.findById(1234)).willReturn(Optional.of(updatedAccount));
     given(accountRepository.save(updatedAccount)).willReturn(mockAccountToAccount(updatedAccount));
-
-    assertEquals("The account number after updating: ", "12vbgdf",
-        accountService.updateAccount(1234, updatedAccount).getAccountNo());
-
   }
 
   // ToDO: write a test for deleteAccountById, after completeing the method.
@@ -117,7 +106,8 @@ public class AccountServiceImplTest {
 
     when(accountRepository.findById(any())).thenThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, ()->accountService.addDeposit(ACCOUNT_ID, deposit));
+    assertThrows(
+        AccountNotFoundException.class, () -> accountService.addDeposit(ACCOUNT_ID, deposit));
   }
 
   @Test
@@ -130,8 +120,7 @@ public class AccountServiceImplTest {
     resultAccount.setBalance(resultAccount.getBalance() + (deposit.getAmount()));
     when(accountRepository.save(any())).thenReturn(resultAccount);
 
-    assertEquals("new ammount is: ",30000.0, accountService.addDeposit(ACCOUNT_ID, deposit));
-
+    assertEquals("new ammount is: ", 30000.0, accountService.addDeposit(ACCOUNT_ID, deposit));
   }
 
   @Test
@@ -140,7 +129,8 @@ public class AccountServiceImplTest {
 
     when(accountRepository.findById(ACCOUNT_ID)).thenThrow(AccountNotFoundException.class);
 
-    assertThrows(AccountNotFoundException.class, ()->accountService.withdrawal(ACCOUNT_ID,withdrawal));
+    assertThrows(
+        AccountNotFoundException.class, () -> accountService.withdrawal(ACCOUNT_ID, withdrawal));
   }
 
   @Test
@@ -148,7 +138,8 @@ public class AccountServiceImplTest {
     Withdrawal withdrawal = Withdrawal.builder().amount(100000.0).build();
 
     when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.ofNullable(getMockAccount()));
-    assertThrows(AmountRestrictionException.class, () -> accountService.withdrawal(ACCOUNT_ID, withdrawal));
+    assertThrows(
+        AmountRestrictionException.class, () -> accountService.withdrawal(ACCOUNT_ID, withdrawal));
   }
 
   @Test
@@ -162,19 +153,21 @@ public class AccountServiceImplTest {
 
     when(accountRepository.save(any())).thenReturn(resultAccount);
 
-    assertEquals("New balance after withdrawal is:", 10000.0, accountService.withdrawal(ACCOUNT_ID, withdrawal));
+    assertEquals(
+        "New balance after withdrawal is:",
+        10000.0,
+        accountService.withdrawal(ACCOUNT_ID, withdrawal));
   }
 
-  private Account getMockAccount(){
+  private Account getMockAccount() {
     return mockAccount(
         ACCOUNT_ID,
         "abcd123",
-        new Customer(1234, "MAAS12", "Maryam",
-            "Askari", "abcd@gmail.com", "1234567890"),
+        new Customer(1234, "MAAS12", "Maryam", "Askari", "abcd@gmail.com", "1234567890"),
         20000.0);
   }
 
-  private Account mockAccount(Integer id, String accountNo, Customer customer, Double balance){
+  private Account mockAccount(Integer id, String accountNo, Customer customer, Double balance) {
     return Account.builder()
         .id(id)
         .accountNo(accountNo)
@@ -192,4 +185,10 @@ public class AccountServiceImplTest {
         .build();
   }
 
+  private Account mapToAccount(AccountRequest accountRequest) {
+    Account account = new Account();
+    account.setBalance(accountRequest.getBalance());
+    account.getCustomer().setId(accountRequest.getCustomerId());
+    return account;
+  }
 }

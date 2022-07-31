@@ -1,6 +1,7 @@
 package com.example.bank.service;
 
 import com.example.bank.exceptions.AccountNotFoundException;
+import com.example.bank.model.dto.AccountRequest;
 import com.example.bank.model.dto.Deposit;
 import com.example.bank.model.dto.Withdrawal;
 import com.example.bank.model.entity.Account;
@@ -15,24 +16,25 @@ import java.util.List;
 @Qualifier("accountServiceIranImpl")
 @Service
 public class AccountServiceIranImpl implements AccountService{
+
     @Override
     public List<Account> getAllAccount() {
         return null;
     }
 
     @Override
-    public Account getAccountById(Integer id) {
+    public AccountRequest getAccountById(Integer id) {
         return null;
     }
 
     @Override
-    public Account registerAccount(Account account) {
-        return null;
+    public void registerAccount(AccountRequest accountRequest) {
+
     }
 
     @Override
-    public Account updateAccount(Integer id, Account account) throws AccountNotFoundException {
-        return null;
+    public void updateAccount(Integer accountId, AccountRequest accountRequest) throws AccountNotFoundException {
+
     }
 
     @Override
