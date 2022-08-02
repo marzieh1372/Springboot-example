@@ -8,6 +8,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 import com.example.bank.exceptions.AccountNotFoundException;
 import com.example.bank.exceptions.AmountRestrictionException;
+import com.example.bank.model.Gender;
 import com.example.bank.model.dto.AccountRequest;
 import com.example.bank.model.dto.Deposit;
 import com.example.bank.model.dto.Withdrawal;
@@ -20,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -65,12 +67,12 @@ public class AccountServiceImplTest {
 
   @Test
   public void updateAccountTest_ThrowNotFoundException() {
-    Account updatedAccount =
+    /*Account updatedAccount =
         new Account(
             9876,
             "12vbgdf",
             new Customer(9876000, "MAAS12", "Maryam", "Askari", "abcd@gmail.com", "1234567890"),
-            10000.0);
+            10000.0);*/
 
     when(accountRepository.findById(9876)).thenThrow(AccountNotFoundException.class);
   }
@@ -163,7 +165,8 @@ public class AccountServiceImplTest {
     return mockAccount(
         ACCOUNT_ID,
         "abcd123",
-        new Customer(1234, "MAAS12", "Maryam", "Askari", "abcd@gmail.com", "1234567890"),
+        new Customer(1,1234, "MAAS12", "Maryam", "Askari",
+            "abcd@gmail.com", "1234567890","1234566888", Gender.FEMALE, LocalDate.of(1994,8,22)),
         20000.0);
   }
 

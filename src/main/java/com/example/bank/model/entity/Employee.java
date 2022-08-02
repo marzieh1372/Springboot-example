@@ -1,5 +1,6 @@
 package com.example.bank.model.entity;
 
+
 import com.example.bank.model.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,42 +10,37 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.OneToMany;
 
 @Data
-@Entity(name = "customer")
-@DiscriminatorValue("Customer")
-@AllArgsConstructor
+@Entity(name = "employee")
 @Builder
-@JsonDeserialize(builder = Customer.CustomerBuilder.class)
-public class Customer extends Person {
+@AllArgsConstructor
+@DiscriminatorValue("employee")
+@JsonDeserialize(builder = Employee.EmployeeBuilder.class)
+public class Employee extends Person{
 
-  @Column(name = "CUSTOMERID", nullable = false)
+  @Column(name = "EMPLOYEEID", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer customerId;
+  private Integer employeeId;
 
-  @OneToMany(
-      mappedBy = "customer",
-      fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL) // har balaie sare pedar omad sare bacheham biad
-  private Set<Account> accountSet = new HashSet<>();
+  @Column(name = "POSITION", nullable = false)
+  private String position;
 
-  public Customer() {
+  @Column(name = "ROLE", nullable = false)
+  private String role;
+
+  public Employee(){
     super();
   }
 
-  public Customer(
-      Integer customerId,
+  public Employee(
+      Integer employeeId,
       Integer id,
       String userName,
       String firstName,
@@ -53,12 +49,17 @@ public class Customer extends Person {
       String phone,
       String nationalId,
       Gender gender,
-      LocalDate birthday) {
+      String position,
+      String role,
+      LocalDate birthday){
     super(id, userName, firstName, lastName, email, phone, nationalId, gender, birthday);
-    this.customerId = customerId;
+    this.employeeId = employeeId;
+    this.position = position;
+    this.role = role;
   }
+
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CustomerBuilder {}
+  public static class EmployeeBuilder{}
 }

@@ -31,9 +31,16 @@ public class Account {
     @Column(name = "ACCOUNT_NUMBER")
     private String accountNo;
 
+    @Column(name = "type")
+    private String type;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CUSTOMERID", nullable = false)
     private Customer customer;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "BANKID", nullable = false)
+    private Bank bank;
 
     @Column(name = "Balance")
     private Double balance;
