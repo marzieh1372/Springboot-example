@@ -1,11 +1,11 @@
 package com.example.bank.service;
 
 import com.example.bank.exceptions.CustomerNotFoundException;
+import com.example.bank.mapper.CustomerMapper;
+import com.example.bank.model.dto.CustomerRequest;
 import com.example.bank.model.entity.Customer;
 import com.example.bank.repo.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,51 +14,63 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+  @Autowired private CustomerMapper mapper;
 
-    @Override
-    public List<Customer> getAllCustomer() {
-        log.info("Starting getAllCustomer method {}");
-        return customerRepository.findAll();
+  @Autowired private CustomerRepository customerRepository;
+
+  @Override
+  public List<Customer> getAllCustomer() {
+    log.info("Starting getAllCustomer method {}");
+    return customerRepository.findAll();
+  }
+
+  @Override
+  public CustomerRequest getCustomerById(Integer id) {
+    log.info("Starting getCustomerById method {" + id + "}");
+    Optional<Customer> customerData = customerRepository.findById(id);
+    if (customerData.isPresent()) {
+      Customer customer = customerData.get();
+      return mapper.mapToCustomerRequest(customer);
+    } else {
+      log.warn("Can not find customer by id {}", id);
+      throw new CustomerNotFoundException("Customer not found by id: " + id);
     }
+  }
 
-    @Override
-    public Customer getCustomerById(Integer id) {
-        log.info("Starting getCustomerById method {" + id + "}");
-        Optional<Customer> customerData = customerRepository.findById(id);
-        return customerData.orElse(null);
+  @Override
+  public void registerCustomer(CustomerRequest customerRequest) {
+    // TODO set validation on dto
+    log.info("Starting registerCustomer method {" + customerRequest.getUserName() + "}");
+    Customer customer = mapper.mappToCustomer(customerRequest);
+    customerRepository.save(customer);
+  }
+
+  @Override
+  public void updateCustomer(CustomerRequest customerRequest) throws CustomerNotFoundException {
+    log.info("Starting updateCustomer method {" + customerRequest.getUserName() + "}");
+    Customer customerData = customerRepository.findByUserName(customerRequest.getUserName());
+    if (customerData != null) {
+      customerData = mapper.mappToCustomer(customerRequest);
+      // TODO other update
+      customerRepository.save(customerData);
+    } else {
+      log.error(
+          "Could no find customer!!!!! , username is wrong : " + customerRequest.getUserName());
+      throw new CustomerNotFoundException(
+          "Could not find customer with userName: " + customerRequest.getUserName());
     }
+  }
 
-    @Override
-    public Customer registerCustomer(Customer customer) {
-        log.info("Starting registerCustomer method {" + customer.getUserName() + "}");
-        return customerRepository.save(customer);
+  @Override
+  public void deleteCustomerById(Integer id) throws CustomerNotFoundException {
+    log.debug("Starting deleteCustomerById method {" + id + "}");
+    Optional<Customer> customerInfo = customerRepository.findById(id);
+    if (customerInfo.isPresent()) {
+      customerRepository.deleteById(id);
+    } else {
+      throw new CustomerNotFoundException("Could not find customer with id: " + id);
     }
-
-    @Override
-    public Customer updateCustomer(Integer id, Customer customer) throws CustomerNotFoundException {
-        log.info("Starting updateCustomer method {" + id + "}");
-        Optional<Customer> customerData = customerRepository.findById(id);
-        if (customerData.isPresent()) {
-            Customer updatedCustomer = customerData.get();
-            updatedCustomer.setFirstName(customer.getFirstName());
-            updatedCustomer.setLastName(customer.getLastName());
-            //TODO other update
-            return customerRepository.save(updatedCustomer);
-        } else {
-            log.error("Could no find customer!!!!! , Id is wrong : " + id);
-            throw new CustomerNotFoundException("Could not find customer with id: " + id);
-        }
-    }
-
-    @Override
-    public void deleteCustomerById(Integer id) {
-        log.debug("Starting deleteCustomerById method {" + id + "}");
-        //TODO find
-        customerRepository.deleteById(id);
-    }
-
+  }
 }

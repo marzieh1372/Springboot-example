@@ -11,4 +11,6 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
    // @Query(value = "select * from customer where firstname=?",nativeQuery = true)
     List<Customer> findByFirstName(String firstName);
+
+    Customer findByUserName(String userName);
 }

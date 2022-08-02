@@ -27,48 +27,91 @@ import javax.validation.Valid;
 public interface CustomerAPI {
 
   @Operation(summary = "Get all customers")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "OK!", content = {@Content(mediaType = "application/list"
-          , schema = @Schema(implementation = Customer.class))}),
-      @ApiResponse(responseCode = "400", description = "Bad request!", content = @Content),
-      @ApiResponse(responseCode = "404", description = "Not found!", content = @Content)})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "OK!",
+            content = {
+              @Content(
+                  mediaType = "application/list",
+                  schema = @Schema(implementation = Customer.class))
+            }),
+        @ApiResponse(responseCode = "400", description = "Bad request!", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Not found!", content = @Content)
+      })
   @GetMapping("/get-customers")
   ResponseEntity<List<Customer>> getAllCustomer();
 
   @Operation(summary = "Add a new customer")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "OK!", content = {@Content(mediaType = "application/json"
-          , schema = @Schema(implementation = Customer.class))}),
-      @ApiResponse(responseCode = "400", description = "Bad request!", content = @Content),
-      @ApiResponse(responseCode = "405", description = "Invalid input", content = @Content)})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "OK!",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = Customer.class))
+            }),
+        @ApiResponse(responseCode = "400", description = "Bad request!", content = @Content),
+        @ApiResponse(responseCode = "405", description = "Invalid input", content = @Content)
+      })
   @PostMapping("/add-customer")
-  ResponseEntity<Customer> addCustomer(@ApiParam(value = "New customer to add", required = true)
-                                              @Valid @RequestBody CustomerRequest customerRequest);
+  ResponseEntity addCustomer(
+      @ApiParam(value = "New customer to add", required = true) @Valid @RequestBody
+          CustomerRequest customerRequest);
+
 
   @Operation(summary = "Find customer by ID", description = "Return a single customer")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful operation", content = {@Content(mediaType = "application/json"
-          , schema = @Schema(implementation = Customer.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
-      @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = Customer.class))
+            }),
+        @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)
+      })
   @GetMapping("/find-customer/{customerId}")
-  ResponseEntity<Customer> getCustomerById(@ApiParam(value = "Id of customer", required = true)
-                                                  @PathVariable("customerId") Integer customerId);
+  ResponseEntity<CustomerRequest> getCustomerById(
+      @ApiParam(value = "Id of customer", required = true) @PathVariable("customerId")
+          Integer customerId);
+
+
   @Operation(summary = "Update an existing customer")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "OK!", content = {@Content(mediaType = "application/json"
-          , schema = @Schema(implementation = Customer.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
-      @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content),
-      @ApiResponse(responseCode = "500", description = "Validation exception", content = @Content)})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "OK!",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = Customer.class))
+            }),
+        @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Validation exception", content = @Content)
+      })
   @PutMapping("/update-customer")
-  ResponseEntity updateCustomer(@ApiParam(value = "Customer for updating", required = true) CustomerRequest customerRequest);
+  ResponseEntity updateCustomer(
+      @ApiParam(value = "Customer for updating", required = true) CustomerRequest customerRequest);
+
 
   @Operation(summary = "Deletes a customer")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
-      @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)})
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)
+      })
   @DeleteMapping("/delete-customer/{customerId}")
-  ResponseEntity deleteCustomer(@ApiParam(value = "customer id for deleting", required = true)
-                                       @PathVariable(value = "customerId") Integer customerId);
+  ResponseEntity deleteCustomer(
+      @ApiParam(value = "customer id for deleting", required = true)
+          @PathVariable(value = "customerId")
+          Integer customerId);
 }

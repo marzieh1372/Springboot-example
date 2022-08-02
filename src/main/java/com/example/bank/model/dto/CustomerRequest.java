@@ -1,23 +1,22 @@
 package com.example.bank.model.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.loader.custom.ScalarReturn;
 
 @Builder
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @JsonDeserialize(builder = CustomerRequest.CustomerRequestBuilder.class)
 public class CustomerRequest {
-
-  @ApiModelProperty(value = "id", example = "64")
-  Integer id;
 
   @ApiModelProperty(value = "username", required = true)
   String userName;
@@ -36,5 +35,5 @@ public class CustomerRequest {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CustomerRequestBuilder{}
+  public static class CustomerRequestBuilder {}
 }
