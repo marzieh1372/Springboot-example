@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-  @Autowired private CustomerMapper mapper;
+  private CustomerMapper mapper;
 
   @Autowired private CustomerRepository customerRepository;
 
