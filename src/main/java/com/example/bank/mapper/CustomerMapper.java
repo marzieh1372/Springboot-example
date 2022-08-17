@@ -5,8 +5,8 @@ import com.example.bank.model.entity.Customer;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface CustomerMapper {
+public abstract class CustomerMapper {
 
-  Customer mappToCustomer(CustomerRequest customerRequest);
-  CustomerRequest mapToCustomerRequest(Customer customer);
+  public abstract Customer mappToCustomer(CustomerRequest customerRequest);
+  public abstract CustomerRequest mapToCustomerRequest(Customer customer);
 }

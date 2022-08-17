@@ -5,7 +5,11 @@ import com.example.bank.model.entity.Account;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface AccountMapper {
-  Account accountRequestMapToAccount(AccountRequest accountRequest);
-  AccountRequest accountMapToAccountRequest(Account account);
+public abstract class AccountMapper {
+
+    public abstract Account accountRequestMapToAccount(AccountRequest accountRequest);
+
+    public abstract AccountRequest accountMapToAccountRequest(Account account);
+
+
 }

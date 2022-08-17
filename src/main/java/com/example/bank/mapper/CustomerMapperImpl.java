@@ -1,3 +1,4 @@
+/*
 package com.example.bank.mapper;
 
 import com.example.bank.model.dto.CustomerRequest;
@@ -33,3 +34,4 @@ public class CustomerMapperImpl implements CustomerMapper{
     return customerRequest;
   }
 }
+*/
