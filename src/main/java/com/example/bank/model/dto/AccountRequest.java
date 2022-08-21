@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 
 @Builder
 @Getter
@@ -20,7 +22,7 @@ import lombok.ToString;
 @ToString
 @JsonDeserialize(builder = AccountRequest.AccountRequestBuilder.class)
 public class AccountRequest {
-
+    
     @ApiModelProperty(example = "64", value = "id", required = true)
     Integer customerId;
 

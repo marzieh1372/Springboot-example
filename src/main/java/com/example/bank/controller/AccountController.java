@@ -8,8 +8,11 @@ import com.example.bank.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,13 +34,14 @@ public class AccountController implements AccountAPI {
   @Override
   public ResponseEntity updateAccount(Integer accountId, AccountRequest accountRequest) {
     log.info("Updating account by accountId:{}", accountId);
-    try {
+    //try {
       accountService.updateAccount(accountId, accountRequest);
       return new ResponseEntity(HttpStatus.OK);
-    } catch (AccountNotFoundException ex) {
+
+   /* } catch (AccountNotFoundException ex) {
       log.warn(ex.getMessage());
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
   }
 
   @Override
@@ -50,29 +54,34 @@ public class AccountController implements AccountAPI {
   @Override
   public ResponseEntity<AccountRequest> getAccountById(Integer accountId) {
     log.info("Starting getCustomerById method {" + accountId + "}");
-    try {
+    //try {
       AccountRequest accountResponse = accountService.getAccountById(accountId);
+
       return new ResponseEntity<>(accountResponse, HttpStatus.OK);
-    } catch (AccountNotFoundException ex) {
+
+    /*} catch (AccountNotFoundException ex) {
       log.warn(ex.getMessage());
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
   }
 
   @Override
   public ResponseEntity deleteAccount(Integer accountId) {
     log.info("Starting deleteCustomer method {" + accountId + "}");
-    try {
+   // try {
       accountService.deleteAccountById(accountId);
       return new ResponseEntity(HttpStatus.OK);
-    } catch (AccountNotFoundException ex) {
+    /*} catch (AccountNotFoundException ex) {
       log.warn(ex.getMessage());
       return new ResponseEntity(HttpStatus.NOT_FOUND);
-    }
+    }*/
   }
 
   @Override
   public ResponseEntity<List<Account>> getAllAccounts() {
     return new ResponseEntity(accountService.getAllAccount(), HttpStatus.OK);
   }
+
+
+
 }

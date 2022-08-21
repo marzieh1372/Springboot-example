@@ -67,12 +67,12 @@ public class AccountServiceImpl implements AccountService {
   public void registerAccount(AccountRequest accountRequest) {
     log.info("Starting registerAccount method");
     Account account = mapper.accountRequestMapToAccount(accountRequest);
-    accountRepository.save(account);
+    Account savedAccount = accountRepository.save(account);
   }
 
   @Override
   public void updateAccount(Integer accountId, AccountRequest accountRequest)
-      throws AccountNotFoundException {
+     /* throws AccountNotFoundException*/ {
     log.info("Updating account by accountId {}", accountId);
     Optional<Account> accountData = accountRepository.findById(accountId);
     if (accountData.isPresent()) {
@@ -86,7 +86,7 @@ public class AccountServiceImpl implements AccountService {
       }
     } else {
       log.warn("Account can not find by id{}", accountId);
-      throw new AccountNotFoundException("Cannot fid account with id: " + accountId);
+      throw new AccountNotFoundException("Cannot find account with id: " + accountId);
     }
   }
 
