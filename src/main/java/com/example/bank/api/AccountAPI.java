@@ -42,11 +42,11 @@ public interface AccountAPI {
       })
   @PutMapping("/update-account")
   ResponseEntity updateAccount(
-      @Validated
           @ApiParam(value = "ID of account to update", required = true)
           @PathVariable("accountId")
           Integer accountId,
-      @ApiParam(value = "Account for updating", required = true) @RequestBody
+          @Validated // mamolan roye vorodi haye method va roye object ha!
+          @ApiParam(value = "Account for updating", required = true) @RequestBody
           AccountRequest accountRequest);
 
   @Operation(summary = "Add a new account")
