@@ -55,7 +55,8 @@ public class AccountServiceImpl implements AccountService {
     log.info("Getting account by id{}", id);
     Optional<Account> account = accountRepository.findById(id);
     if (account.isPresent()) {
-      AccountRequest accountRequest = mapper.accountMapToAccountRequest(account.get());
+      Account account1 = account.get();
+      AccountRequest accountRequest = mapper.accountMapToAccountRequest(account1);
       return accountRequest;
     } else {
       log.warn("Account not found with id{}", id);
