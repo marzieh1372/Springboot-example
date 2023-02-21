@@ -22,11 +22,12 @@ public class TestController {
     @Autowired
     TestService testService;
 
-    @GetMapping("/mive/narengi")
+    @GetMapping("/mive/narengi/{id}")
     //@RequestMapping(method = {RequestMethod.GET,RequestMethod.PUT}, path = "/havij")
-    public String writeNameGet(@RequestParam(defaultValue = "sdsd") String name) {
+    public String writeNameGet(@PathVariable("id")  long id
+            ,@RequestParam(defaultValue = "sdsd") String name){
         testService.test();
-        System.out.println("Hello " + name);
+        System.out.println("Hello " + name + " "+id);
         return "Hi(:";
     }
 

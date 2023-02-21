@@ -32,7 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
     Optional<Customer> customerData = customerRepository.findById(id);
     if (customerData.isPresent()) {
       Customer customer = customerData.get();
-      return mapper.mapToCustomerRequest(customer);
+      return null;
+      //return mapper.mapToCustomerRequest(customer);
     } else {
       log.warn("Can not find customer by id {}", id);
       throw new CustomerNotFoundException("Customer not found by id: " + id);

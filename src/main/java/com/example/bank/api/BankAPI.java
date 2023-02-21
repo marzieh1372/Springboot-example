@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Api(tags = "Bank api")
 @Tag(name = "bank")
-@RequestMapping("/bank/account")
+@RequestMapping("/v1/bank/account")
 public interface BankAPI {
 
   @Operation(summary = "Returns account balance", description = "Returns account balance in SEK")

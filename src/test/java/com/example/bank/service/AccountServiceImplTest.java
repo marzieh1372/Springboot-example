@@ -1,5 +1,6 @@
 package com.example.bank.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -27,7 +28,8 @@ import java.util.Optional;
 public class AccountServiceImplTest {
   private static final Integer ACCOUNT_ID = 1234;
 
-  @Mock AccountRepository accountRepository;
+  @Mock
+  AccountRepository accountRepository;
 
   @InjectMocks AccountServiceImpl accountService;
 
@@ -60,7 +62,8 @@ public class AccountServiceImplTest {
     AccountRequest accountRequest =
         AccountRequest.builder().customerId(1234).balance(10000.0).build();
     Account newAccount = mapToAccount(accountRequest);
-    when(accountRepository.save(newAccount)).thenReturn(getMockAccount());
+    when(accountRepository.save(any())).thenReturn(getMockAccount());
+
   }
 
   @Test
@@ -157,13 +160,15 @@ public class AccountServiceImplTest {
         "New balance after withdrawal is:",
         10000.0,
         accountService.withdrawal(ACCOUNT_ID, withdrawal));
+
   }
 
   private Account getMockAccount() {
     return mockAccount(
         ACCOUNT_ID,
         "abcd123",
-        new Customer(1234, "MAAS12", "Maryam", "Askari", "abcd@gmail.com", "1234567890"),
+        new Customer(1234, "MAAS12", "Maryam",
+                "Askari", "abcd@gmail.com", "1234567890"),
         20000.0);
   }
 

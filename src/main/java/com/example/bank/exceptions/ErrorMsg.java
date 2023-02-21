@@ -14,6 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ErrorMsg {
 
-    public  String msg;
+    public String msg;
     public Date date;
 }
